@@ -1,0 +1,38 @@
+/* .App {
+  margin: 0 auto;
+  min-height: 100vh;
+  max-width: 1200px;
+  background-color: rgb(249, 249, 247);
+  display: flex;
+  flex-direction: column;
+}
+*/
+
+/* Top-right image on every page */
+/* body {
+  font-family: 'SORA', sans-serif;
+  background: #F9FAF4 url(../src/assets/images/landing-1.png) no-repeat;
+  background-position: top right;
+} */
+
+body {
+  font-family: 'SORA', sans-serif;
+  background: #F9FAF4;
+}
+
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+@media screen and (max-width:1200px) {
+  .practice-video {
+    width: 320px;
+    height: 300px;
+  }
+}

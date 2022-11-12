@@ -1,0 +1,49 @@
+.Toastify__toast--success {
+  background: #F9FAF4 /*#E8E5E*/ !important;
+  color: #9494B6 !important;
+  /* border: 1px solid #9494B6; */
+  /* border-radius: 50px !important; */
+}
+
+.Toastify__toast--error {
+  background: #F9FAF4 /*#E8E5E*/ !important;
+  color: #9494B6 !important;
+  /* border: 1px solid #9494B6; */
+  /* border-radius: 50px !important; */
+}
+
+.profile-card {
+  margin: 10px;
+}
+
+.profile-card .avatar img {
+  width: 100%;
+  max-width: 350px;
+  max-height: 350px;
+  text-align: center;
+  margin: 20px;
+}
+
+.profile-card .edit-btn {
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background: #F8C55C;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-card .edit-btn:hover {
+  background: #9494B6;
+  color: white;
+}
+
+.profile-card .profile-text {
+  padding: 10px;
+}
+
+.profile h3 {padding: 5px 0;}

@@ -1,0 +1,46 @@
+.join-form {
+  margin: 0 auto;
+  width: 500px;
+  padding: 30px;
+}
+
+.error {
+  height: 8px;
+  color: red;
+  font-size: 12px;
+  padding: 0;
+}
+
+.error p {
+  margin: 5px;
+}
+
+form div {
+  padding: 10px;
+  margin: 0 auto;
+}
+
+form input, form select {
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+form button {
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px;
+  background: #F8C55C;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+form button:hover {
+  background: #9494B6;
+  color: white;
+}

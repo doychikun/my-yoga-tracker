@@ -1,0 +1,12 @@
+.logo {
+  height: 40px;
+  line-height: 43px;
+  margin-left: 22px;
+  /* padding: 0px 22px; */
+  margin-top: -60px;
+}
+
+.logo-img {
+  height: 125px;
+  width: 125px;
+}

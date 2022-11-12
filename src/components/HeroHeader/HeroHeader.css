@@ -1,0 +1,65 @@
+.Mui-active {
+  color: #F8C55C;
+}
+
+.hero-header {
+  position: relative;
+  padding: 20px;
+}
+
+#hero-header-main-text {
+  font-weight: 700;
+  margin-bottom: 23px;
+  margin-top: 30px;
+  /* font-family: Lora; */
+}
+
+#big-text {
+  color: #E8E5EE;
+  font-weight: 650;
+  font-size: 150px;
+  opacity: 0.5;
+  /* margin-top: 10px; */
+}
+
+#intro-text {
+  font-size: 16px;
+  line-height: 35px;
+  width: 60%;
+}
+
+.images-wrapper {
+  margin-top: 260px;
+  background-color: #E8E5EE;
+  display: flex;
+  justify-content: space-around;
+  /* width: 1200px; */
+  /* margin: 0 auto; */
+}
+
+.images-wrapper .card-img-top {
+  margin-top: -150px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 318px;
+}
+
+.images-wrapper .card-frontpage {
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 100px;
+  /* width: 75%; */
+  /* background-color: crimson; */
+}
+
+.images-wrapper .title {
+  margin: 30px auto;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.images-wrapper .content {
+  margin: 30px auto;
+  width: 50%;
+  font-size: 14px;
+}

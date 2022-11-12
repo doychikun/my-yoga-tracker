@@ -1,0 +1,32 @@
+#header {
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 90%;
+}
+
+#header-wrapper-left {
+  gap: 40px;
+  font-size: 22px;
+}
+
+#header-wrapper-right {
+  gap: 20px;
+  font-size: 18px;
+}
+
+.top-menu-link {
+  text-decoration: none;
+  color: #3A1212;
+  /* border-bottom: 3px solid #FFBF00; */
+}
+
+.top-menu-link-2 {
+  text-decoration: none;
+  color: #3A1212;
+  margin-right: 30px;
+  background-color: #F8C55C;
+  border-radius: 28px;
+  padding: 10px 30px;
+}
+
