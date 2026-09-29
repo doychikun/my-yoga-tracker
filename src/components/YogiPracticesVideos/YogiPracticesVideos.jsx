@@ -1,10 +1,9 @@
 import "./YogiPracticesVideos.css";
 import { Box, Stack, Typography } from "@mui/material";
-import Loader from "../Loader/Loader";
 
 const YogiPracticesVideos = ({ practiceVideos }) => {
   // console.log(practiceVideos);
-  if (!practiceVideos.length) return <Loader />;
+  if (!practiceVideos.length) return null;
 
   return (
     <Box
