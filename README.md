@@ -13,6 +13,7 @@
     npm i
     npm start
     ```
+  - The "Yogi Practices" videos come from the RapidAPI YouTube search API. Copy `.env.example` to `.env.local` and set `REACT_APP_RAPIDAPI_KEY` to your own key before running `npm start` (restart the dev server after changing it). Note that any `REACT_APP_` value is bundled into the built site, so use a key restricted to this API.
   - We are also using Google Firebase Hosting service. You can check our project by using the following link: https://fitness-tracker-app-f7bc9.web.app/
 
 ## List of features:
@@ -23,7 +24,7 @@
 
   - **Login** - You can use this form to go through authentication and access your profile.
 
-  - **Yogi Practices** - Provides you with access to yoga videos. You can choose between 5 yoga styles - Vinyasa Flow, Hatha, Ashtanga, Yin or Mindfulness yoga. You can change what videos to be presented with a click of a button. There are 3 pages of videos, that will be loaded for each of the selected yoga styles. When you click on a video, a new tab will open in the browser and the video will start.
+  - **Yogi Practices** - Provides you with access to yoga videos. You can choose between 5 yoga styles - Vinyasa Flow, Hatha, Ashtanga, Yin or Mindfulness yoga. You can change what videos to be presented with a click of a button. The videos for the selected yoga style are split into pages of 8. When you click on a video, a new tab will open in the browser and the video will start.
 
   - **Yogi Goals** - Gives you the opportunity to track individual yoga progress and add goals. You can choose between 5 yoga styles and add/edit progress for each. You can also add/edit/remove different kind of goals and track progress for each as well. You can filter goals with the use of the calendar. There is also the opportunity to search for goals, access goals set by other users and add these to your dashboard.
 

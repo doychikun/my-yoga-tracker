@@ -1,15 +1,19 @@
 import "./YogiPractices.css";
 import { useState, useEffect } from "react";
 import { fetchYoutubeData } from "../../services/fetchYoutubeData";
-import { Box, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Stack, Typography } from "@mui/material";
 import { yogaTypes } from "../../common/yoga.types";
 import PrimaryButton1 from "../../components/PrimaryButton1/PrimaryButton1"
 import YogiPracticesVideos from "../../components/YogiPracticesVideos/YogiPracticesVideos"
 import Pagination from "@mui/material/Pagination";
+import Loader from "../../components/Loader/Loader";
 
 function YogiPractices() {
   const [practiceType, setPracticeType] = useState(yogaTypes.DEFAULT_VINYASA_FLOW_YOGA);
   const [practiceVideos, setPracticeVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,15 +28,36 @@ function YogiPractices() {
     indexOfFirstPractice,
     indexOfLastPractice
   );
+  const pageCount = Math.ceil(practiceVideos.length / practicesPerPage);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchPracticesData = async () => {
-      const practiceVideosData = await fetchYoutubeData(practiceType);
-      setPracticeVideos(practiceVideosData.contents);
+      setIsLoading(true);
+      setError(null);
+      setPracticeVideos([]);
+      try {
+        const practiceVideosData = await fetchYoutubeData(practiceType, {
+          signal: controller.signal,
+        });
+        // the search can also return channels and playlists, keep only videos
+        const videos = (practiceVideosData?.contents || []).filter(
+          (item) => item.video?.videoId
+        );
+        setPracticeVideos(videos);
+      } catch (err) {
+        if (err.name === "AbortError") return;
+        console.error(err);
+        setError("We couldn't load the practice videos. Please try again.");
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
+      }
     };
 
     fetchPracticesData();
-  }, [practiceType]);
+    return () => controller.abort();
+  }, [practiceType, reloadKey]);
 
   return (
     <Box
@@ -78,18 +103,42 @@ function YogiPractices() {
           window.scrollTo({ top: 400, behavior: "smooth" });
         }}
       />      
-      <YogiPracticesVideos practiceVideos={currentPracticeVideos} />
-      
-      <Stack mt="100px" alignItems="center">
-        <Pagination
-          color="standard"
-          count={3}
-          page={currentPage}
-          onChange={paginate}
-          // shape='rounded'
-          // size='large'
-        />
-      </Stack>
+      {isLoading && <Loader />}
+
+      {!isLoading && error && (
+        <Alert
+          severity="error"
+          sx={{ mt: "60px", maxWidth: "600px" }}
+          action={
+            <Button color="inherit" size="small" onClick={() => setReloadKey((key) => key + 1)}>
+              Retry
+            </Button>
+          }
+        >
+          {error}
+        </Alert>
+      )}
+
+      {!isLoading && !error && !practiceVideos.length && (
+        <Typography mt="60px">No practice videos found for this style yet.</Typography>
+      )}
+
+      {!isLoading && !error && (
+        <YogiPracticesVideos practiceVideos={currentPracticeVideos} />
+      )}
+
+      {!isLoading && !error && pageCount > 1 && (
+        <Stack mt="100px" alignItems="center">
+          <Pagination
+            color="standard"
+            count={pageCount}
+            page={currentPage}
+            onChange={paginate}
+            // shape='rounded'
+            // size='large'
+          />
+        </Stack>
+      )}
     </Box>
   );
 }
