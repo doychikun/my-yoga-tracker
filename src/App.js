@@ -18,6 +18,8 @@ import Profile from "./views/Profile/Profile";
 import AboutUs from "./views/AboutUs/AboutUs";
 import YogiGoals from "./views/Yogi Goals/YogiGoals";
 import YogiPractices from "./views/Yogi Practices/YogiPractices";
+import Poses from "./views/Poses/Poses";
+import FlowPlayer from "./views/Poses/FlowPlayer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -67,6 +69,8 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/about-us" element={<AboutUs />} />
                   <Route path="/yogi-practices" element={<YogiPractices />} />
+                  <Route path="/poses" element={<Poses />} />
+                  <Route path="/flows/:flowId" element={<FlowPlayer />} />
                   <Route
                     path="/yogi-goals"
                     element={

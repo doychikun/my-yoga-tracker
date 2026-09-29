@@ -51,6 +51,9 @@ const Header = () => {
         <NavLink to="/yogi-practices" className="top-menu-link">
           Yogi Practices
         </NavLink>
+        <NavLink to="/poses" className="top-menu-link">
+          Poses & Flows
+        </NavLink>
         {user ? (
           <NavLink to="/yogi-goals" className="top-menu-link">
             Yogi Goals
