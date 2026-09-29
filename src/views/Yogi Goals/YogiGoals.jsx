@@ -1,8 +1,8 @@
 import './YogiGoals.css'
 import GoalChart from './GoalChart/GoalChart'
-import { Grid, Box, Button, Typography, TextField } from '@mui/material'
+import { Grid, Box, Button, Typography, Paper } from '@mui/material'
 import { getAllCustomerGoals } from '../../services/goals/goals'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo } from 'react'
 import FilterResults from './FilterResults/FilterResults'
 import CustomDialog from '../../components/CustomDialog/CustomDialog'
 import GoalAddEdit from './GoalChart/GoalAddEdit/GoalAddEdit'
@@ -10,35 +10,9 @@ import { Add } from '@mui/icons-material'
 import AppContext from "../../providers/AppContext"
 import SearchGoals from './SearchGoals/SearchGoals'
 import ProgressChart from './ProgressChart/ProgressChart'
-import LinearProgressWithLabel from "./ProgressChart/LinearProgressWithLabel/LinearProgressWithLabel";
-
-const YOGA_TYPES = [
-    {
-        name: "vinyasa Flow",
-        progress: 0,
-        amount: 100
-    },
-    {
-        name: "hatha yoga",
-        progress: 0,
-        amount: 100
-    },
-    {
-        name: "ashtanga yoga",
-        progress: 0,
-        amount: 100
-    },
-    {
-        name: "yin yoga",
-        progress: 0,
-        amount: 100
-    },
-    {
-        name: "mindfulness yoga",
-        progress: 0,
-        amount: 100
-    }
-];
+import LogSession from './LogSession/LogSession'
+import { getUserSessions, createSession } from '../../services/sessions'
+import { weeklyMinutesByStyle, currentStreak } from '../../common/sessionStats'
 
 const YogiGoals = () => {
   const { userData } = useContext(AppContext)
@@ -62,114 +36,57 @@ const YogiGoals = () => {
   }, [userData])
 
 
-  const localYogaTypes = localStorage.getItem('yogaTypes');
-  const [yogaTypes, setYogaTypes] = useState(localYogaTypes ? JSON.parse(localYogaTypes) : YOGA_TYPES);
-  const [selectedPractice, setSelectedPractice] = useState(null);
-  
-  const selectCurrentPractice = ({ practiceItem }) => {
-    if (selectedPractice && practiceItem.name === selectedPractice.name) {
-      return setSelectedPractice(null);
-    }
+  const [sessions, setSessions] = useState([])
 
-    setSelectedPractice(practiceItem);
-  };
+  useEffect(() => {
+    getUserSessions({ owner: userData.username })
+      .then(setSessions)
+      .catch(e => alert(e.message))
+  }, [userData])
 
-  const updateYogaType = () => {
-    const newYogaTypes = yogaTypes.map(yogaType => {
-      if (selectedPractice.name !== yogaType.name) {
-        return yogaType;
-      }
-      
-      return selectedPractice;
-    })
-    localStorage.setItem('yogaTypes', JSON.stringify(newYogaTypes));
-    setYogaTypes(newYogaTypes);
-  };
+  const logSession = (session) =>
+    createSession({ owner: userData.username, ...session })
+      .then(created => {
+        setSessions(prevSessions => [...prevSessions, created])
+        return true
+      })
+      .catch(e => {
+        alert(e.message)
+        return false
+      })
 
-  const updateCurrentPractice = (event) => {
-    setSelectedPractice(prevSelectedPractice => ({ ...prevSelectedPractice, progress: Number(event.target.value) }));
-  };
+  const weeklyMinutes = useMemo(() => weeklyMinutesByStyle(sessions), [sessions])
+  const weeklyTotal = weeklyMinutes.reduce((total, { minutes }) => total + minutes, 0)
+  const streak = useMemo(() => currentStreak(sessions), [sessions])
 
   return (
     <Box className='YogiGoals'>
            <Typography variant='h4' textAlign={'start'}>My daily hour of yoga practice</Typography>
       <Grid container spacing={2}>
-        <Grid item xs={8}>
-          <Grid container>
-            <Grid>
-              <ProgressChart yogaTypes={yogaTypes} />
+        <Grid item xs={12} md={8}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Paper className='YogiGoals-stat' elevation={0}>
+                <Typography variant='h3'>{streak}</Typography>
+                <Typography variant='body2'>day streak</Typography>
+              </Paper>
             </Grid>
-          <Grid container item spacing={1} xs={12}>
-              {yogaTypes.map((practiceItem, index) => {
-                return (
-                  <Grid item key={practiceItem.name + index}>
-                      <Button
-                          variant='contained'
-                          onClick={() => selectCurrentPractice({practiceItem})}
-                          fullWidth
-                          sx={{
-                          backgroundColor: '#F8C55C',
-                          padding: '10px',
-                          color: '#272727',
-                          marginRight: '25px',
-                          borderRadius: '28px',
-                          fontSize: '10px',
-                          '&:hover': {
-                              backgroundColor: '#F8C55C',
-                              color: '#9494B6',
-                          },
-                      }}>
-                          {practiceItem.name}
-                      </Button>
-                  </Grid>
-                )
-              })}
-              {selectedPractice &&(
-                <Grid container item spacing={2} justifyContent={'center'}>
-                  <Grid item xs={12} width={'50%'}>
-                    <LinearProgressWithLabel value={selectedPractice.progress} />
-                  </Grid>
-                  <Grid item >
-                    <TextField
-                      variant='outlined'
-                      type='number'
-                      inputProps={{
-                        step: "any",
-                        min: 0,
-                        max: 100
-                      }}
-                      placeholder='Progress'
-                      fullWidth
-                      value={selectedPractice.progress}
-                      onChange={updateCurrentPractice}
-                    />
-                  </Grid>
-                  <Grid item alignSelf={'center'}>
-                    <Button
-                        variant='contained'
-                        onClick={updateYogaType}
-                        fullWidth
-                        sx={{
-                        backgroundColor: '#F8C55C',
-                        padding: '10px',
-                        color: '#272727',
-                        marginRight: '25px',
-                        borderRadius: '28px',
-                        fontSize: '12px',
-                        '&:hover': {
-                            backgroundColor: '#F8C55C',
-                            color: '#9494B6',
-                        },
-                    }}>
-                        Apply progress
-                    </Button>
-                  </Grid>
-                </Grid>
-              )}
+            <Grid item xs={6}>
+              <Paper className='YogiGoals-stat' elevation={0}>
+                <Typography variant='h3'>{weeklyTotal}</Typography>
+                <Typography variant='body2'>minutes this week</Typography>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <ProgressChart weeklyMinutes={weeklyMinutes} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='h6' textAlign={'start'} marginBottom={2}>Log a practice session</Typography>
+              <LogSession onLog={logSession} />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <FilterResults unfilteredGoals={unfilteredGoals} setFilteredGoals={setFilteredGoals} />
         </Grid>
         <Grid item xs={12}>
