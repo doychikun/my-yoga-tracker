@@ -1,44 +1,29 @@
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryStack } from "victory";
+import { VictoryAxis, VictoryBar, VictoryChart } from "victory";
 
-const ProgressChart = ({yogaTypes}) => {
-    const transformData = (datasetInitial) => {
-        const progress = datasetInitial.reduce((datasetArray, currentDataset) =>
-            [...datasetArray, { x: currentDataset.name, y: currentDataset.progress }]
-            , []);
-        const amount = datasetInitial.reduce((datasetArray, currentDataset) =>
-            [...datasetArray, { x: currentDataset.name, y: currentDataset.amount - currentDataset.progress }]
-            , []);
-        
-        const dataset = [amount, progress];
-        const totals = progress.map((_data, i) => {
-            return dataset.reduce((memo, curr) => {
-                return memo + curr[i].y;
-            }, 0);
-        });
-        return dataset.map((data) => {
-            return data.map((datum, i) => {
-                return { x: datum.x, y: totals[i] - datum.y};
-            });
-        });
-    }
-        
+// weeklyMinutes: [{ style, label, minutes }] as returned by weeklyMinutesByStyle
+const ProgressChart = ({ weeklyMinutes }) => {
+    const data = weeklyMinutes.map(({ label, minutes }) => ({ x: label, y: minutes }));
+    const hasMinutes = data.some(({ y }) => y > 0);
+
     return (
-        <VictoryChart 
-            domainPadding={{ x: 13, y: 10 }}
+        <VictoryChart
+            domainPadding={{ x: 25, y: 10 }}
+            // keep a sensible axis before anything is logged this week
+            domain={hasMinutes ? undefined : { y: [0, 60] }}
         >
-            <VictoryStack
-                colorScale={["#F8C55C", "grey",]}
-            >
-                {transformData(yogaTypes).map((data, i) => {
-                    return <VictoryBar data={data} key={i}/>;
-                })}
-            </VictoryStack>
-            <VictoryAxis
-                dependentAxis
-                tickFormat={(tick) => `${tick}%`}
+            <VictoryBar
+                data={data}
+                labels={({ datum }) => (datum.y ? `${datum.y}` : '')}
+                style={{ data: { fill: "#F8C55C" } }}
             />
             <VictoryAxis
-                tickFormat={() => null}
+                dependentAxis
+                tickFormat={(tick) => `${tick} min`}
+                style={{ tickLabels: { fontSize: 10 } }}
+            />
+            <VictoryAxis
+                tickFormat={(label) => label.replace(/ yoga$/i, '')}
+                style={{ tickLabels: { fontSize: 10 } }}
             />
         </VictoryChart>
     );

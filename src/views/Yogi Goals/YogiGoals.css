@@ -4,3 +4,9 @@
   height: auto;
   width: auto;
 }
+.YogiGoals-stat {
+  padding: 16px;
+  text-align: center;
+  background-color: #FDF1D6 !important;
+  border-radius: 16px !important;
+}
